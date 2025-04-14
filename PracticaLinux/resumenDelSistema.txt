@@ -1,0 +1,39 @@
+Resumen del sistema
+===================
+
+Usuario:
+guille
+
+Fecha y hora:
+dom 23 mar 2025 17:57:58 -03
+
+Kernel:
+Linux - 6.11.0-19-generic
+
+Arquitectura:
+x86_64
+
+CPU:
+Intel(R) Core(TM) i3-8100 CPU @ 3.60GHz
+
+Primeras 10 interrupciones:
+            CPU0       CPU1       CPU2       CPU3       
+   0:         44          0          0          0  IR-IO-APIC    2-edge      timer
+   8:          0          0          0          0  IR-IO-APIC    8-edge      rtc0
+   9:          0          0          0          0  IR-IO-APIC    9-fasteoi   acpi
+  14:          0          0          0          0  IR-IO-APIC   14-fasteoi   INT3450:00
+  16:         15          0          0          0  IR-IO-APIC   16-fasteoi   i801_smbus
+  17:          0          0       3831          0  IR-IO-APIC   17-fasteoi   snd_hda_intel:card1
+ 120:          0          0          0          0  DMAR-MSI    0-edge      dmar0
+ 123:          0          0          0      88389  IR-PCI-MSI-0000:00:17.0    0-edge      ahci[0000:00:17.0]
+ 124:      68795          0          0          0  IR-PCI-MSI-0000:00:14.0    0-edge      xhci_hcd
+ 129:          0      75073          0          0  IR-PCI-MSI-0000:00:1f.6    0-edge      eno1
+
+Memoria swap:
+0B
+
+Memoria principal:
+Mem:            31Gi       4,2Gi        24Gi        58Mi       2,7Gi        27Gi
+
+Placa de video:
+02:00.0 VGA compatible controller: NVIDIA Corporation TU106-410 [GeForce RTX 2060] (rev a1)
