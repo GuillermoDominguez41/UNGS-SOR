@@ -1,0 +1,27 @@
+@startuml
+start
+
+:Inicializar semáforos;
+:Crear threads para dinosaurios;
+
+repeat
+    :Seleccionar dinosaurio;
+    :Decidir tipo de trabajo (A o B);
+
+    if (Trabajo tipo B y 2 consecutivos?) then (Sí)
+        :Esperar prioridad para A;
+        :Esperar enfriamiento;
+        :Enfriar fotocopiadora;
+    else (No)
+        :Colocar trabajo en bandeja;
+    endif
+
+    :Usar fotocopiadora;
+
+repeat while (Quedan dinosaurios?)
+
+:Esperar a que terminen los threads;
+:Destruir semáforos;
+
+stop
+@enduml

@@ -12,7 +12,8 @@ sem_t prioridad_sem; // Controla la prioridad A sobre B
 
 // Variables Globales
 int trabajos_b_seguidos = 0;
-int total_trabajos_b = 0;
+int trabajos_b_en_espera = 0; // 3 en espera
+int total_trabajos = 0;
 
 // Primitivas
 void usar_fotocopiadora(char tipo_trabajo, int id_dinosaurio) {
@@ -20,17 +21,20 @@ void usar_fotocopiadora(char tipo_trabajo, int id_dinosaurio) {
     printf("Dinosaurio %d usando la fotocopiadora para trabajo tipo %c\n", id_dinosaurio, tipo_trabajo);
     if (tipo_trabajo == 'B') {
         trabajos_b_seguidos++;
-        total_trabajos_b++;
+        total_trabajos++;
         if (trabajos_b_seguidos == 2) {
             sem_post(&prioridad_sem); // Señala que se necesita un trabajo A
         }
     } else {
         trabajos_b_seguidos = 0; // Reinicia el contador si es trabajo A
+        // Debo reiniciar el contador de trabajos B en cola??
     }
     // Simula el tiempo de fotocopiado
     sleep(tipo_trabajo == 'A' ? 1 : 3);
     printf("Dinosaurio %d terminó de usar la fotocopiadora\n", id_dinosaurio);
     sem_post(&fotocopiadora_sem);
+
+    // Si el trabajo era de tipo B, se incrementa el contador de trabajos B en cola"
 }
 
 void esperar_enfriamiento() {
@@ -43,6 +47,7 @@ void esperar_enfriamiento() {
 void colocar_trabajo_en_bandeja(int id_dinosaurio) {
     sem_wait(&bandeja_sem);
     printf("Dinosaurio %d colocó su trabajo en la bandeja\n", id_dinosaurio);
+    // Sumar trabajo de tipo B, en el contador "trabajos_b_en_cola"
     sleep(1); // Simula colocar el trabajo
     sem_post(&bandeja_sem);
 }
@@ -55,15 +60,15 @@ void imprimir_estado(int id_dinosaurio, char tipo_trabajo, int enfriando) {
     printf("-------------------------------\n");
 }
 
-// Función para el thread del dinosaurio
-void *dinosaurio(void *arg) {
+// Funcion thread del dinosaurio
+void *dinosaurio(void *arg) { // 
     int id_dinosaurio = *(int *)arg;
     char tipo_trabajo;
     // Simula la decisión del tipo de trabajo
     if (rand() % 100 < 50) {
-        tipo_trabajo = 'A';
+        tipo_trabajo = 'A'; //  Textos teóricos (rápidos, no recalientan la máquina).
     } else {
-        tipo_trabajo = 'B';
+        tipo_trabajo = 'B'; // Prácticas con imágenes (tardan más y recalientan la máquina).
     }
 
     colocar_trabajo_en_bandeja(id_dinosaurio);
@@ -76,6 +81,8 @@ void *dinosaurio(void *arg) {
     }
 
     usar_fotocopiadora(tipo_trabajo, id_dinosaurio);
+
+    // Si es la segunda vez que realizo un trabajo B debo iniciar la espera y antes de liberar.
 
     pthread_exit(NULL);
 }
@@ -105,6 +112,10 @@ int main() {
     sem_destroy(&bandeja_sem);
     sem_destroy(&enfriamiento_sem);
     sem_destroy(&prioridad_sem);
+
+    printf("Todos los dinosaurios han terminado sus trabajos.\n");
+    printf("Total de trabajos realizados: %d\n", total_trabajos);
+    printf("Fin del programa.\n");
 
     return 0;
 }
