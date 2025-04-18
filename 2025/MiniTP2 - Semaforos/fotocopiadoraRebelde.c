@@ -36,7 +36,8 @@ void usar_fotocopiadora(char tipo_trabajo, int id_dinosaurio) {
         trabajos_b_seguidos = 0; // Reinicia el contador de trabajos B consecutivos
         total_trabajos++;
         imprimir_estado(id_dinosaurio, tipo_trabajo);
-        sleep(1); // Simula el tiempo de fotocopiado para A
+        sleep(1); // Simula el tiempo de fotocopiado para A        
+        sem_post(&prioridad_TipoA_sem); // Libera el semáforo de prioridad para permitir más trabajos
     } else {
         trabajos_b_seguidos++;
         total_trabajos++;
@@ -53,10 +54,9 @@ void usar_fotocopiadora(char tipo_trabajo, int id_dinosaurio) {
             int intentos = 5;
             while (intentos > 0) {
                 if (sem_trywait(&prioridad_TipoA_sem) == 0) {
-                    // Se desbloqueó la prioridad porque llegó un trabajo de tipo A
-                    break;
+                    break; // Se desbloqueó la prioridad porque llegó un trabajo de tipo A
                 }
-                sleep(1); // Esperar 1 segundo antes de intentar de nuevo
+                sleep(2); // Esperar 1 segundo antes de intentar de nuevo
                 intentos--;
             }
 
